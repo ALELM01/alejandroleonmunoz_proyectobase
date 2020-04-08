@@ -1,0 +1,114 @@
+{
+    _id: 1,
+    nombre: "Antonio",
+    ahorros: 1600,
+    ingresosAnuales: 5000,
+    lugaresVisitados: [{
+            nombre: "India",
+            diasEstancia: 10,
+            fecha: new Date("2016-12-23"),
+            precio: 1400
+        },
+        {
+            nombre: "PerÃº",
+            diasEstancia: 15,
+            fecha: new Date("2017-03-28"),
+            precio: 1200
+        }
+    ]
+},
+
+
+//datamodel alumno
+Nombre: string,
+    Apellidos: string,
+    centro: Number,
+    Dirección: Object {
+        Calle: String,
+        Numero: Number,
+        CodigoPostal: Number,
+        Municipio: String
+
+    }
+DNI: String,
+    FNacimiento: Date,
+    Sexo: String,
+    Repetidor: Boolean
+examenes: [{
+    asignatura: string,
+    fecha: date,
+    nota: number,
+
+}]
+
+
+//datamodel profesor
+Nombre: string,
+    Apellidos: string
+DNI: String,
+    F_Nacimiento: Date,
+
+    //centro
+    nombre
+codigo
+Dirección: Object {
+    Calle: String,
+    Numero: Number,
+    CodigoPostal: Number,
+    Municipio: String,
+    Localizacion: [lat, lon]
+}
+
+
+db.centros.insertMany([{
+    nombre: "Punta del Verde",
+    Codigo: 284,
+    Direccion: {
+        Calle: "Barrio Nuevo",
+        Numero: 4,
+        CodigoPostal: 41012,
+        Municipio: "Sevilla",
+        Localizacion: {
+            type: "Point",
+            coordinates: [-5.988971, 37.355579]
+        }
+    }
+}]);
+
+db.alumnos.insertMany([{
+    Nombre: "Juan",
+    Apellidos: "Mur",
+    Centro: 284,
+    Dirección: {
+        Calle: "Perez Galdos",
+        Numero: 54,
+        CodigoPostal: 41023,
+        Municipio: "Sevilla"
+    },
+    DNI: "85469789D",
+    FNacimiento: new Date("1974-05-28"),
+    Sexo: "Masculino",
+    Repetidor: false,
+    Examenes: [{
+            Asignatura: "Base de datos",
+            Fecha: new Date("2020-02-24"),
+            Nota: 7
+        },
+        {
+            Asignatura: "Administracion de sistemas operativos",
+            Fecha: new Date("2020-02-24"),
+            Nota: 8
+        },
+        {
+            Asignatura: "Base de datos",
+            Fecha: new Date("2020-03-14"),
+            Nota: 5
+        },
+        {
+            Asignatura: "Servicios de red e internet",
+            Fecha: new Date("2020-02-28"),
+            Nota: 9
+        }
+    ]
+
+}]);
