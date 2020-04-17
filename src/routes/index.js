@@ -5,91 +5,138 @@ const router = express.Router()
 import {connect} from '../database'
 import { ObjectID } from 'mongodb'
 
-router.get('/',  async (req, res) => {
-    res.render('index')
-})
-
-router.get('/libros',  async (req, res) => {
-    const db = await connect()
-    const result = await db.collection('libros').find({}).toArray()
-    res.render('libros', {
-        result
-    })
-})
-
-
 //Api Rest
-
-// Motrar toda la coleccion
-router.get('/api', async (req,res) => {
+// MOSTRAR ALUMNOS
+router.get('/api/alumnos', async (req,res) => { //tocado
     const db = await connect()
-    const result = await db.collection('libros').find({}).toArray()
+    const result = await db.collection('alumnos').find({}).toArray()
     res.json(result)
 })
 
-// Mostrar un solo documento por ID
-router.get('/api:id', async (req, res) => {
+// MOSTRAR PROFESORES
+router.get('/api/profesores', async (req,res) => { //tocado
+    const db = await connect()
+    const result = await db.collection('profesores').find({}).toArray()
+    res.json(result)
+})
+
+// MOSTRAR CENTROS
+router.get('/api/centros', async (req,res) => { 
+    const db = await connect()
+    const result = await db.collection('centros').find({}).toArray()
+    res.json(result)
+})
+
+// MOSTRAR UN SOLO ALUMNO
+router.get('/api/alumnos/:id', async (req, res) => { 
     const { id } = req.params
     const db = await connect()
-    const result = await db.collection('libros').findOne({_id: ObjectID(id)})
+    const result = await db.collection('alumnos').findOne({_id: ObjectID(id)})
     res.json(result)
 })
 
-// Insertar desde la API
-router.post('/api', async (req, res) => {
+
+// MOSTRAR UN SOLO PROFESOR
+router.get('/api/profesores/:id', async (req, res) => { 
+    const { id } = req.params
+    const db = await connect()
+    const result = await db.collection('profesores').findOne({_id: ObjectID(id)})
+    res.json(result)
+})
+
+
+// MOSTRAR UN SOLO CENTRO
+router.get('/api/centros/:id', async (req, res) => { //tocado
+    const { id } = req.params
+    const db = await connect()
+    const result = await db.collection('centros').findOne({_id: ObjectID(id)})
+    res.json(result)
+})
+
+// INSERTAR DESDE LA API
+router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
     const db = await connect()
     const task = {
-        ISBN: req.body.ISBN,
-        titulo: req.body.titulo,
-        autores: [req.body.autores],
-        genero: req.body.genero,
-        editorial: req.body.editorial,
-        fechaEdicion: new Date,
-        numPaginas: req.body.num,
-        edad: req.body.edad,
-        premios: {
-            wins: req.body.wins,
-            nominados: req.body.nominados
-        },
-        precio: req.body.Precio,
-        descatalogado: false
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        Centro : req.query.Centro,  
+        Dirección : {
+            Calle : req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio
+        }, 
+        DNI : req.query.DNI,
+        FNacimiento : req.query.Fecha,
+        Sexo : "Masculino", //modificar zona sexo en edit y aqui
+        Repetidor : req.query.Repetidor
     }
-    const result = await db.collection('libros').insert(task)
+    const result = await db.collection('alumnos').insert(task)
     res.json(result)
 })
 
-// Eliminar desde la API 
-router.delete('/api:id', async (req, res) => {
+
+
+
+
+
+
+// ELIMINAR UN ALUMNO
+router.delete('/api/alumnos/:id', async (req, res) => { 
     const { id } = req.params
     const db = await connect()
-    const result = await db.collection('libros').deleteOne({_id: ObjectID(id)})
+    const result = await db.collection('alumnos').deleteOne({_id: ObjectID(id)})
     res.json({
-        message: `Task ${id} deleted`,
+        message: `ALUMNO ${id} ELIMINADO`,
         result
     })
 })
 
-//Modificar desde la API
-router.put('/api:id', async (req, res) => {
+
+//ELIMINAR UN PROFESOR
+router.delete('/api/profesores/:id', async (req, res) => {
+    const { id } = req.params
+    const db = await connect()
+    const result = await db.collection('profesores').deleteOne({_id: ObjectID(id)})
+    res.json({
+        message: `PROFESOR ${id} ELIMINADO`,
+        result
+    })
+})
+
+//ELIMINAR UN CENTRO
+router.delete('/api/centros/:id', async (req, res) => { 
+    const { id } = req.params
+    const db = await connect()
+    const result = await db.collection('centros').deleteOne({_id: ObjectID(id)})
+    res.json({
+        message: `CENTRO ${id} ELIMINADO`,
+        result
+    })
+})
+
+//Modificar desde la API //modificar valores dentro del update
+// que sean para profesores, alumnos y centros cada router.put para cada uno de ellos
+router.put('/api/alumnos/:id', async (req, res) => {
     const { id } = req.params
     const update = {
-        ISBN: req.body.ISBN,
-        titulo: req.body.titulo,
-        autores: [req.body.autores],
-        genero: req.body.genero,
-        editorial: req.body.editorial,
-        fechaEdicion: new Date,
-        numPaginas: req.body.num,
-        edad: req.body.edad,
-        premios: {
-            wins: req.body.wins,
-            nominados: req.body.nominados
-        },
-        precio: req.body.Precio,
-        descatalogado: false
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        Centro : req.query.Centro,  
+        Dirección : {
+            Calle : req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio
+        }, 
+        DNI : req.query.DNI,
+        FNacimiento : req.query.Fecha,
+        Sexo : "Masculino", //modificar zona sexo en edit y aqui
+        Repetidor : req.query.Repetidor
     }
+    
     const db = await connect()
-    await db.collection('libros').updateOne({
+    await db.collection('alumnos').updateOne({
         _id: ObjectID(id)}, {$set: update})
     res.json({
         message: `Task ${id} Update`
@@ -97,65 +144,261 @@ router.put('/api:id', async (req, res) => {
 
 })
 
-
-// CRUD TIENDAS
-
-// Listar todas las tiendas
-router.get('/tiendas',  async (req, res) => {
+//PROFESORES
+router.put('/api/profesores/:id', async (req, res) => { //TOCAR VALORES UPDATE
+    const { id } = req.params
+    const update = {
+        //METER VALORES PROFESORES
+    }
     const db = await connect()
-    const result = await db.collection('tiendas').find({}).toArray()
-    res.render('tiendas', {
+    await db.collection('profesores').updateOne({
+        _id: ObjectID(id)}, {$set: update})
+    res.json({
+        message: `Task ${id} Update`
+    })
+
+})
+
+//CENTROS
+router.put('/api/centros/:id', async (req, res) => { //TOCAR VALORES CENTROS
+    const { id } = req.params
+    const update = {
+        //METER VALORES CENTROS
+    }
+    const db = await connect()
+    await db.collection('centros').updateOne({
+        _id: ObjectID(id)}, {$set: update})
+    res.json({
+        message: `Task ${id} Update`
+    })
+
+})
+// CRUD 
+
+//LISTAR
+
+router.get('/',  async (req, res) => {
+    res.render('index')
+})
+
+router.get('/alumnos',  async (req, res) => {
+    const db = await connect()
+    const result = await db.collection('alumnos').find({}).toArray()
+    console.log("result: "+JSON.stringify(result));
+    res.render('alumnos', {
         result
     })
 })
 
-// Eliminar tienda
-router.get('/delete/:id', async (req, res) => {
-    const { id } = req.params 
+router.get('/profesores',  async (req, res) => {
     const db = await connect()
-    await db.collection('tiendas').deleteOne({_id: ObjectID(id)})
-   res.redirect('/tiendas')
+    const result = await db.collection('profesores').find({}).toArray()
+    console.log("result: "+JSON.stringify(result));
+    res.render('profesores', {
+        result
+    })
 })
 
-// Añadir tiendas
-router.get('/add', async (req, res) => {
+router.get('/centros',  async (req, res) => {
+    const db = await connect()
+    const result = await db.collection('centros').find({}).toArray()
+    console.log("result: "+JSON.stringify(result));
+    res.render('centros', {
+        result
+    })
+})
+
+
+//ELIMINAR
+// Eliminar alumno
+router.get('/deletealumno/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    const db = await connect()
+    await db.collection('alumnos').deleteOne({_id: ObjectID(id)})
+   res.redirect('/alumnos')
+})
+
+//eliminar un profesor
+router.get('/deleteprofesores/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    const db = await connect()
+    await db.collection('profesores').deleteOne({_id: ObjectID(id)})
+   res.redirect('/profesores')
+})
+
+//eliminar un centro
+router.get('/deletecentros/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    const db = await connect()
+    await db.collection('centros').deleteOne({_id: ObjectID(id)})
+   res.redirect('/centros')
+})
+
+//AÑADIR
+// Añadir alumno
+router.get('/addalumnos', async (req, res) => { //tocado
+    const db = await connect()
+    let repetidorF=false;
+    console.log("req.query.Repetidor: "+req.query.Repetidor);
+    if(req.query.Repetidor=="Repetidor"){
+        repetidorF=true;
+    }
+    const task = {
+        Nombre: req.query.Nombre,
+        Apellidos: req.query.Apellidos,
+        Centro: req.query.Centro,  
+        Dirección : {
+            Calle: req.query.Calle,
+            CodigoPostal: req.query.CodigoPostal,
+            Municipio : req.query.Municipio
+        },
+        DNI :  req.query.DNI,
+        FNacimiento : req.query.Fecha,
+        Sexo : req.query.Sexo,
+        Repetidor : repetidorF
+    }
+    await db.collection('alumnos').insertOne(task)
+    res.redirect('/alumnos')
+})
+
+//añadir profesores
+router.get('/addprofesores', async (req, res) => { //TOCAR
     const db = await connect()
     const task = {
-        nombre: req.query.nombre,
-        sede: parseInt(req.query.sede),
-        localizacion: {
-            type:'Point',
-            coordinates: [parseFloat(req.query.w), parseFloat(req.query.n)]
-        }
+       //añadir valores de los profesores
     }
-    await db.collection('tiendas').insertOne(task)
-    res.redirect('/tiendas')
+    
+    await db.collection('profesores').insertOne(task),
+    res.redirect('/profesores')
 })
 
-// Editar tiendas
-router.get('/edit/:id', async (req, res) => {
+//añadir centros
+router.get('/addcentros', async (req, res) => { //tocado
+    const db = await connect()
+
+    const task = {
+
+        //añadir la informacion de los centros
+    }
+    await db.collection('centros').insertOne(task)
+    res.redirect('/centros')
+})
+
+
+
+
+
+
+
+
+
+
+//EDITAR
+
+// Editar alumno
+router.get('/editalumno/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
-    const result = await db.collection('tiendas').findOne({_id: ObjectID(id)})
-    res.render('edit', {
+    const result = await db.collection('alumnos').findOne({_id: ObjectID(id)})
+    res.render('editalumnos', {
         result
     })   
 })
 
-router.get('/update/:id', async (req, res) => {
+router.get('/editprofesores/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    const db = await connect()
+    const result = await db.collection('profesores').findOne({_id: ObjectID(id)})
+    res.render('editprofesores', {
+        result
+    })   
+})
+router.get('/editcentros/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    const db = await connect()
+    const result = await db.collection('centros').findOne({_id: ObjectID(id)})
+    res.render('editcentros', {
+        result
+    })   
+})
+
+
+//ACTUALIZAR
+router.get('/updatealumnos/:id', async (req, res) => {//PERFECTO NO TOCAR
+    const { id } = req.params
+    let repetidorF=false;
+    console.log("req.query.Repetidor: "+req.query.Repetidor);
+    if(req.query.Repetidor=="Repetidor"){
+        repetidorF=true;
+    }
+    const update = { 
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        Centro : req.query.Centro,  
+        Dirección : {
+            Calle : req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio
+        }, 
+        DNI : req.query.DNI,
+        FNacimiento : req.query.Fecha,
+        Sexo : req.query.Sexo,
+        Repetidor : repetidorF
+    }
+    
+    const db = await connect()//tocado
+    await db.collection('alumnos').updateOne({
+        _id: ObjectID(id)}, {$set: update})
+        res.redirect('/alumnos')
+})
+
+//updateprofesores
+router.get('/updateprofesores/:id', async (req, res) => {//MODIFICAR VALORES PROFESORES
     const { id } = req.params
     const update = { 
-        nombre: req.query.nombre,
-        sede: parseInt(req.query.sede),
-        localizacion: {
-            type:'Point',
-            coordinates: [parseFloat(req.query.w), parseFloat(req.query.n)]
-        }
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        Centro : req.query.Centro,  
+        Dirección : {
+            Calle : req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio
+        }, 
+        DNI : req.query.DNI
     }
-    const db = await connect()
-    await db.collection('tiendas').updateOne({
+     
+    const db = await connect()//tocado
+    await db.collection('profesores').updateOne({
         _id: ObjectID(id)}, {$set: update})
-        res.redirect('/tiendas')
+        res.redirect('/profesores')
+})
+
+
+//update centros
+router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
+    const { id } = req.params
+    const update = { 
+        Nombre: req.query.Nombre,
+        Codigo: req.query.Codigo, 
+        Direccion : {
+            Calle: req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio,
+            Localizacion: {
+                type: "Point",
+                Coordinates: [req.query.lat, req.query.lon]
+            }
+        } 
+        
+    }
+     
+    const db = await connect()//tocado
+    await db.collection('centros').updateOne({
+        _id: ObjectID(id)}, {$set: update})
+        res.redirect('/centros')
 })
 
 

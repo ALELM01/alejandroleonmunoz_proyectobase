@@ -6,34 +6,27 @@
         <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
-                     <form action="/add" method="GET">
-                        <h3> <center> Añadir Centros</center></h3>
+                     <form action="/addprofesores" method="GET">
+                        <h3> <center> Añadir Profesores</center></h3>
                         <br/>
                          <div class="form-group">
-                             <input type='text' name="nombre" placeholder="Inserta un Nombre" 
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
                              class="form-control">
                          </div>
                          <div class="form-group">
-                            <input type='Number' name="codigo" placeholder="Inserte un Apellido" 
-                            class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type='text' name="Centro" placeholder="Inserte un Centro" 
-                            class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type='text' name="Direccion" placeholder="Inserte una Dirección" 
-                            class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type='text' name="CP" placeholder="Inserte un Codigo Postal" 
+                            <input type='text' name="Apellidos" placeholder="Inserte los Apellidos" 
                             class="form-control">
                         </div>
                         <div class="form-group">
                             <input type='text' name="DNI" placeholder="Inserte un DNI" 
                             class="form-control">
                         </div>
-                        
+                        <div class="form-group">
+                            <input type='date' name="Fecha" placeholder="Inserte una fecha de nacimiento " 
+                            class="form-control">
+                        </div>
+                      
+                  
                          <button type="submit" class="btn btn-primary btn-block">Add</button>
                      </form>
                 </div>
@@ -55,33 +48,22 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Apellidos</th>
-                        <th>Centro</th>
-                        <th>Direccion</th>
                         <th>DNI</th>
+                        <th>Fecha de nacimiento</th>
+                       
                     </tr>
                 </thead>
                 <tbody id="myTable">
                     <% for(var i = 0; i < result.length; i++) { %>
                     <tr>
                         <!-- <td><%= i + 1 %></td> -->
-                        <td> <%= result[i].Nombre%></td>
-                        <td> <%= result[i].Apellidos%></td>
-                        <td><%= result[i].Centro%></td>
-                        <td> 
-                            <%= result[i].Dirección.Calle%>
-                            <%= result[i].Dirección.Numero%>
-                      <br>
-                      <%= result[i].Dirección.CodigoPostal%>
-                      <br>
-                      <%= result[i].Dirección.Municipio%>
-                          </td>
-                          <td>
-                      <%= result[i].DNI%>
-
-                          </td>
+                        <td> <%= result[i].nombre%></td>
+                        <td> <%= result[i].apellidos%></td>
+                        <td> <%= result[i].DNI%></td>
+                        <td> <%= result[i].F_Nacimiento%></td>
                         <td> 
                             <a href="/delete/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
-                            <a href="/edit/<%= result[i]._id %>" class="btn btn-info"> Edit</a>
+                            <a href="/editprofesores/<%= result[i]._id %>" class="btn btn-info"> Edit</a>
                             </td>
                     </tr>
                     <% } %>

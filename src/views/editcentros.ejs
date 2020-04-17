@@ -1,0 +1,49 @@
+<%- include ('partials/_header') %> 
+<div class="container">
+    <!-- Formulario para añadir tiendas-->
+    <div class="row">
+            <div class="card">
+                <div class="card-body">
+                     <form action="/updatecentros/<%= result._id%>" method="GET">
+                         <div class="form-group">
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
+                             class="form-control"  value="<%= result.Nombre %>">
+                         </div>
+                        <div class="form-group">
+                            <input type='number' name="Codigo" placeholder="Inserte un codigo" 
+                            class="form-control" value="<%= result.Codigo %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Calle" placeholder="Inserte una Dirección" 
+                            class="form-control" value="<%= result.Direccion.Calle %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="Numero" placeholder="Inserte un Numero" 
+                            class="form-control" value="<%= result.Direccion.Numero %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="CodigoPostal" placeholder="Inserte un Codigo Postal" 
+                            class="form-control" value="<%= result.Direccion.CodigoPostal %>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type='text' name="Municipio" placeholder="Inserte un Municipio" 
+                            class="form-control" value="<%= result.Direccion.Municipio %>">
+                        </div>
+                         <div class="form-group">
+                            <input type='number' step="any" name="lat" placeholder="Inserta primera coordenada (W)" 
+                            class="form-control" value="<%= result.Direccion.Localizacion.Coordinates[0] %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='number' step="any" name="lon"  placeholder="Inserta segunda coordenada (N)" 
+                            class="form-control" value="<%= result.Direccion.Localizacion.Coordinates[1]%>">
+                        </div> 
+                         <button type="submit" class="btn btn-primary btn-block">Add</button>
+                     </form>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<%- include ('partials/_footer') %>

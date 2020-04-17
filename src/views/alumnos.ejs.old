@@ -1,0 +1,82 @@
+<%- include ('partials/_header') %> 
+<style>
+.input-group.md-form.form-sm.form-2 input.amber-border {
+  border: 1px solid #ffca28;
+  margin: 35px 900px 50px 40px;
+}
+</style>
+<script>
+// Filter table
+
+$(document).ready(function(){
+  $("#tableSearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+<div class="input-group md-form form-sm form-2 pl-0">
+    <h4> &nbsp;&nbsp; Buscador: </h4>
+    <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search"  id="tableSearch">
+</div>
+<div class="container"></div>
+    <!-- Lista -->
+    <br/>
+    <div class="col-nd-7">  
+            <table class="table table-bordered table-hover" style="background-color: white;">
+                <thead>
+                    <tr>
+                      <th></th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Centro</th>
+                        <th>Direccion</th>
+                        <th>DNI</th>
+                        <th>EXÁMENES</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                    <% for(var i = 0; i < result.length; i++) { %>
+                    <tr>
+                        <td> <%= i + 1 %></td>
+                        <td> <%= result[i].Nombre%></td>
+                        <td> <%= result[i].Apellidos%></td>
+                        <td> <%= result[i].Centro%></td>
+                        <td> 
+                          <%= result[i].Dirección.Calle%>
+                          <%= result[i].Dirección.Numero%>
+                    <br>
+                    <%= result[i].Dirección.CodigoPostal%>
+                    <br>
+                    <%= result[i].Dirección.Municipio%>
+                        </td>
+                        <td> <%= result[i].DNI%></td>
+                        <td> 
+                           
+                            <%
+                                let examenes= result[i].Examenes;
+                                for (var j = 0; j < examenes.length; j++) {                              
+                                  %>
+                                  <br>
+                                  <%= examenes[j].Fecha%>
+                                  <br>
+                                  <%= examenes[j].Asignatura%>
+                                  <br>
+                                  <%= examenes[j].Nota%>  
+
+                                  <%
+                                }
+                            %>
+                        
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+    </div>
+</div>
+
+
+<%- include ('partials/_footer') %>

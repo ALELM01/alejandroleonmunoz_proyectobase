@@ -6,15 +6,15 @@
         <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
-                     <form action="/add" method="GET">
-                        <h3> <center> Añadir Centros</center></h3>
+                     <form action="/addalumnos" method="GET">
+                        <h3> <center> Añadir Alumnos</center></h3>
                         <br/>
                          <div class="form-group">
-                             <input type='text' name="nombre" placeholder="Inserta un Nombre" 
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
                              class="form-control">
                          </div>
                          <div class="form-group">
-                            <input type='Number' name="codigo" placeholder="Inserte un Apellido" 
+                            <input type='text' name="Apellidos" placeholder="Inserte un Apellido" 
                             class="form-control">
                         </div>
                         <div class="form-group">
@@ -22,22 +22,52 @@
                             class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type='text' name="Direccion" placeholder="Inserte una Dirección" 
+                            <input type='text' name="Calle" placeholder="Inserte una Calle" 
                             class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type='text' name="CP" placeholder="Inserte un Codigo Postal" 
+                            <input type='Number' name="Numero" placeholder="Inserte un numero" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="CodigoPostal" placeholder="Inserte un Codigo Postal" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Municipio" placeholder="Inserte un municipio" 
                             class="form-control">
                         </div>
                         <div class="form-group">
                             <input type='text' name="DNI" placeholder="Inserte un DNI" 
                             class="form-control">
                         </div>
-                        
+                        <div class="form-group">
+                            <input type='date' name="Fecha" placeholder="Inserte una fecha de nacimiento " 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="radio" id="Masculino" name="Sexo" value="Masculino"  class="form-check-input">
+                            <label for="male">Masculino</label><br>
+                            <input type="radio" id="Femenino" name="Sexo" value="Femenino"  class="form-check-input">
+                            <label for="female">Femenino</label><br>
+                           
+                        </div>
+                        <div class="form-group">
+                            <input type='checkbox' id="Repetidor" name="Repetidor"   class="form-check-input">
+                            <label for="Repetidor">Repetidor</label><br> 
+                        </div>
                          <button type="submit" class="btn btn-primary btn-block">Add</button>
                      </form>
                 </div>
             </div>
+            <!--    
+
+                   DNI: "85469789D",
+    FNacimiento: new Date("1974-05-28"),
+    Sexo: "Masculino",
+    Repetidor: false,
+
+            -->
         </div>
         </div>
         <hr style="color: black;" noshade="noshade"/>
@@ -80,8 +110,8 @@
 
                           </td>
                         <td> 
-                            <a href="/delete/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
-                            <a href="/edit/<%= result[i]._id %>" class="btn btn-info"> Edit</a>
+                            <a href="/deletealumno/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
+                            <a href="/editalumno/<%= result[i]._id %>" class="btn btn-info"> edit</a>
                             </td>
                     </tr>
                     <% } %>

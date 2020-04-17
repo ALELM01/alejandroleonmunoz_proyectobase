@@ -43,13 +43,31 @@ examenes: [{
 
 
 //datamodel profesor
-Nombre: string,
-    Apellidos: string
+nombre: string,
+apellidos: string
 DNI: String,
-    F_Nacimiento: Date,
+F_Nacimiento: Date,
+
+db.profesores.insertMany([
+{
+nombre:"Jose",
+apellidos:"Carrion",
+DNI:"236489675P",
+F_Nacimiento: new Date("1975-04-16")
+},
+{
+    nombre:"Adolfo",
+    apellidos:"Suarez",
+    DNI:"254796358T",
+    F_Nacimiento: new Date("1967-05-20")
+    }
+])
+
+
+
 
     //centro
-    nombre
+nombre
 codigo
 Dirección: Object {
     Calle: String,

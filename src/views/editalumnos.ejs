@@ -1,0 +1,69 @@
+<%- include ('partials/_header') %> 
+<div class="container">
+    <!-- Formulario para añadir tiendas-->
+    <div class="row">
+            <div class="card">
+                <div class="card-body">
+                     <form action="/updatealumnos/<%= result._id%>" method="GET">
+                         <div class="form-group">
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
+                             class="form-control"  value="<%= result.Nombre %>">
+                         </div>
+                         <div class="form-group">
+                            <input type='text' name="Apellidos" placeholder="Inserte un Apellido" 
+                            class="form-control" value="<%= result.Apellidos %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="Centro" placeholder="Inserte un Centro" 
+                            class="form-control" value="<%= result.Centro %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Calle" placeholder="Inserte una Dirección" 
+                            class="form-control" value="<%= result.Dirección.Calle %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="Numero" placeholder="Inserte un Numero" 
+                            class="form-control" value="<%= result.Dirección.Numero %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="CodigoPostal" placeholder="Inserte un Codigo Postal" 
+                            class="form-control" value="<%= result.Dirección.CodigoPostal %>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type='text' name="Municipio" placeholder="Inserte un Municipio" 
+                            class="form-control" value="<%= result.Dirección.Municipio %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="DNI" placeholder="Inserte un DNI" 
+                            class="form-control" value="<%= result.DNI %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="DNI" placeholder="Inserte un DNI" 
+                            class="form-control" value="<%= result.DNI %>">
+                        </div>
+                        <div class="form-group">
+                            <input type='date' name="Fecha" placeholder="Inserte una fecha de nacimiento " 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="radio" id="Masculino" name="Sexo" value="Masculino"  class="form-check-input">
+                            <label for="male">Masculino</label><br>
+                            <input type="radio" id="Femenino" name="Sexo" value="Femenino"  class="form-check-input">
+                            <label for="female">Femenino</label><br>
+                           
+                        </div>
+                        <div class="form-group">
+                            <input type='checkbox' id="Repetidor" name="Repetidor"   class="form-check-input" > <!--MIRAR-->
+                            <label for="Repetidor">Repetidor</label><br> 
+                        </div>
+                         <button type="submit" class="btn btn-primary btn-block">Add</button>
+                     </form>
+                </div>
+            </div>
+        </div>
+</div>
+FNacimiento : req.query.Fecha,
+
+
+<%- include ('partials/_footer') %>
