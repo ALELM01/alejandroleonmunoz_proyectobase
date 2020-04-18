@@ -53,7 +53,7 @@ router.get('/api/centros/:id', async (req, res) => { //tocado
     res.json(result)
 })
 
-// INSERTAR DESDE LA API
+// INSERTAR DESDE LA API A ALUMNOS
 router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
     const db = await connect()
     const task = {
@@ -67,7 +67,7 @@ router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
             Municipio : req.query.Municipio
         }, 
         DNI : req.query.DNI,
-        FNacimiento : req.query.Fecha,
+        F_Nacimiento : req.query.Fecha,
         Sexo : "Masculino", //modificar zona sexo en edit y aqui
         Repetidor : req.query.Repetidor
     }
@@ -75,7 +75,39 @@ router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
     res.json(result)
 })
 
+//INSERTAR DESDE LA API A PROFESORES
+router.post('/api/profesores', async (req, res) => { //tenemos que tocarlo
+    const db = await connect()
+    const task = {
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        DNI : req.query.DNI,
+        F_Nacimiento : req.query.Fecha
+    }
+    const result = await db.collection('profesores').insert(task)
+    res.json(result)
+})
 
+//INSERTAR DESDE LA API A CENTROS
+router.post('/api/centros', async (req, res) => { //tenemos que tocarlo
+    const db = await connect()
+    const task = {
+        Nombre: req.query.Nombre,
+        Codigo: req.query.Codigo, 
+        Direccion : {
+            Calle: req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio,
+            Localizacion: {
+                type: "Point",
+                Coordinates: [req.query.lat, req.query.lon]
+            }
+        }  
+    }
+    const result = await db.collection('centros').insert(task)
+    res.json(result)
+})
 
 
 
@@ -115,8 +147,7 @@ router.delete('/api/centros/:id', async (req, res) => {
     })
 })
 
-//Modificar desde la API //modificar valores dentro del update
-// que sean para profesores, alumnos y centros cada router.put para cada uno de ellos
+//MODIFICAR DESDE LA API UN ALUMNO
 router.put('/api/alumnos/:id', async (req, res) => {
     const { id } = req.params
     const update = {
@@ -144,7 +175,7 @@ router.put('/api/alumnos/:id', async (req, res) => {
 
 })
 
-//PROFESORES
+// MODIFICAR DESDE LA API UN PROFESOR
 router.put('/api/profesores/:id', async (req, res) => { //TOCAR VALORES UPDATE
     const { id } = req.params
     const update = {
@@ -159,7 +190,7 @@ router.put('/api/profesores/:id', async (req, res) => { //TOCAR VALORES UPDATE
 
 })
 
-//CENTROS
+//MODIFICAR DESDE LA API UN CENTRO
 router.put('/api/centros/:id', async (req, res) => { //TOCAR VALORES CENTROS
     const { id } = req.params
     const update = {
@@ -210,7 +241,7 @@ router.get('/centros',  async (req, res) => {
 
 
 //ELIMINAR
-// Eliminar alumno
+// ELIMINAR UN ALUMNO
 router.get('/deletealumno/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -218,7 +249,7 @@ router.get('/deletealumno/:id', async (req, res) => { //tocado
    res.redirect('/alumnos')
 })
 
-//eliminar un profesor
+//ELIMINAR UN PROFESOR
 router.get('/deleteprofesores/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -226,7 +257,7 @@ router.get('/deleteprofesores/:id', async (req, res) => { //tocado
    res.redirect('/profesores')
 })
 
-//eliminar un centro
+//ELIMINAR UN CENTRO
 router.get('/deletecentros/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -235,7 +266,7 @@ router.get('/deletecentros/:id', async (req, res) => { //tocado
 })
 
 //AÑADIR
-// Añadir alumno
+// AÑADIR ALUMNOS
 router.get('/addalumnos', async (req, res) => { //tocado
     const db = await connect()
     let repetidorF=false;
@@ -261,36 +292,42 @@ router.get('/addalumnos', async (req, res) => { //tocado
     res.redirect('/alumnos')
 })
 
-//añadir profesores
+//AÑADIR PROFESORES
 router.get('/addprofesores', async (req, res) => { //TOCAR
     const db = await connect()
     const task = {
-       //añadir valores de los profesores
+        Nombre: req.query.Nombre,
+        Apellidos : req.query.Apellidos,
+        DNI : req.query.DNI,
+        F_Nacimiento : req.query.Fecha
     }
     
     await db.collection('profesores').insertOne(task),
     res.redirect('/profesores')
 })
 
-//añadir centros
+//AÑADIR CENTROS
 router.get('/addcentros', async (req, res) => { //tocado
     const db = await connect()
 
     const task = {
 
-        //añadir la informacion de los centros
+        Nombre: req.query.Nombre,
+        Codigo: req.query.Codigo, 
+        Direccion : {
+            Calle: req.query.Calle,
+            Numero : req.query.Numero,
+            CodigoPostal : req.query.CodigoPostal,
+            Municipio : req.query.Municipio,
+            Localizacion: {
+                type: "Point",
+                Coordinates: [req.query.lat, req.query.lon]
+            }
+        } 
     }
     await db.collection('centros').insertOne(task)
     res.redirect('/centros')
 })
-
-
-
-
-
-
-
-
 
 
 //EDITAR
@@ -327,7 +364,7 @@ router.get('/editcentros/:id', async (req, res) => { //tocado
 router.get('/updatealumnos/:id', async (req, res) => {//PERFECTO NO TOCAR
     const { id } = req.params
     let repetidorF=false;
-    console.log("req.query.Repetidor: "+req.query.Repetidor);
+    console.log("req.query.Repetidor: "+req.query.Repetidor); //CREO QUE SE REPITE EL DNI POR ESTO
     if(req.query.Repetidor=="Repetidor"){
         repetidorF=true;
     }
@@ -359,16 +396,10 @@ router.get('/updateprofesores/:id', async (req, res) => {//MODIFICAR VALORES PRO
     const update = { 
         Nombre: req.query.Nombre,
         Apellidos : req.query.Apellidos,
-        Centro : req.query.Centro,  
-        Dirección : {
-            Calle : req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
-            Municipio : req.query.Municipio
-        }, 
-        DNI : req.query.DNI
+        DNI : req.query.DNI,
+        F_Nacimiento : req.query.Fecha
     }
-     
+      
     const db = await connect()//tocado
     await db.collection('profesores').updateOne({
         _id: ObjectID(id)}, {$set: update})
