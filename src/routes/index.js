@@ -204,6 +204,10 @@ router.put('/api/centros/:id', async (req, res) => { //TOCAR VALORES CENTROS
     })
 
 })
+
+
+
+
 // CRUD 
 
 //LISTAR
@@ -284,9 +288,11 @@ router.get('/addalumnos', async (req, res) => { //tocado
             Municipio : req.query.Municipio
         },
         DNI :  req.query.DNI,
-        FNacimiento : req.query.Fecha,
+        FNacimiento :  new Date(req.query.Fecha),
         Sexo : req.query.Sexo,
-        Repetidor : repetidorF
+        Repetidor : repetidorF,
+        Examanes: []
+
     }
     await db.collection('alumnos').insertOne(task)
     res.redirect('/alumnos')
@@ -296,10 +302,10 @@ router.get('/addalumnos', async (req, res) => { //tocado
 router.get('/addprofesores', async (req, res) => { //TOCAR
     const db = await connect()
     const task = {
-        Nombre: req.query.Nombre,
-        Apellidos : req.query.Apellidos,
+        nombre: req.query.Nombre,
+        apellidos : req.query.Apellidos,
         DNI : req.query.DNI,
-        F_Nacimiento : req.query.Fecha
+        F_Nacimiento : new Date(req.query.Fecha)
     }
     
     await db.collection('profesores').insertOne(task),
@@ -332,7 +338,7 @@ router.get('/addcentros', async (req, res) => { //tocado
 
 //EDITAR
 
-// Editar alumno
+//EDITAR UN ALUMNO
 router.get('/editalumno/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -342,6 +348,14 @@ router.get('/editalumno/:id', async (req, res) => { //tocado
     })   
 })
 
+router.get('/addexamen/:id', async (req, res) => { //tocado
+    const { id } = req.params 
+    
+    res.render('introducirexamen', {
+        id
+    })   
+})
+//EDITAR UN PROFESOR
 router.get('/editprofesores/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -350,6 +364,8 @@ router.get('/editprofesores/:id', async (req, res) => { //tocado
         result
     })   
 })
+
+//EDITAR UN CENTRO
 router.get('/editcentros/:id', async (req, res) => { //tocado
     const { id } = req.params 
     const db = await connect()
@@ -361,10 +377,10 @@ router.get('/editcentros/:id', async (req, res) => { //tocado
 
 
 //ACTUALIZAR
-router.get('/updatealumnos/:id', async (req, res) => {//PERFECTO NO TOCAR
+router.get('/updatealumnos/:id', async (req, res) => {
     const { id } = req.params
     let repetidorF=false;
-    console.log("req.query.Repetidor: "+req.query.Repetidor); //CREO QUE SE REPITE EL DNI POR ESTO
+    console.log("req.query.Repetidor: "+req.query.Repetidor); 
     if(req.query.Repetidor=="Repetidor"){
         repetidorF=true;
     }
@@ -379,25 +395,50 @@ router.get('/updatealumnos/:id', async (req, res) => {//PERFECTO NO TOCAR
             Municipio : req.query.Municipio
         }, 
         DNI : req.query.DNI,
-        FNacimiento : req.query.Fecha,
+        FNacimiento :  new Date(req.query.Fecha),
         Sexo : req.query.Sexo,
         Repetidor : repetidorF
     }
     
-    const db = await connect()//tocado
+    const db = await connect()
     await db.collection('alumnos').updateOne({
         _id: ObjectID(id)}, {$set: update})
         res.redirect('/alumnos')
 })
 
+
+// ACTUALIZAR EXAMEN DEL ALUMNO
+router.get('/updatealumno/:id/addexamen', async (req, res) => { 
+    const { id } = req.params
+
+    console.log(" id: "+ id);
+
+    const update = {
+        Asignatura: req.query.Asignatura,
+        Fecha:  new Date (req.query.Fecha),
+        Nota: req.query.Nota
+
+    }
+    console.log(" update: "+ JSON.stringify(update));
+    
+    const db = await connect();
+    
+    await  db.collection('alumnos').updateOne(
+        { _id: ObjectID(id) },
+        { $push: {Examenes:update} }
+     )    
+        res.redirect('/alumnos')
+})
+
+
 //updateprofesores
-router.get('/updateprofesores/:id', async (req, res) => {//MODIFICAR VALORES PROFESORES
+router.get('/updateprofesores/:id', async (req, res) => {
     const { id } = req.params
     const update = { 
-        Nombre: req.query.Nombre,
-        Apellidos : req.query.Apellidos,
+        nombre: req.query.Nombre,
+        apellidos : req.query.Apellidos,
         DNI : req.query.DNI,
-        F_Nacimiento : req.query.Fecha
+        F_Nacimiento : new Date(req.query.Fecha)
     }
       
     const db = await connect()//tocado
@@ -412,7 +453,7 @@ router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
     const { id } = req.params
     const update = { 
         Nombre: req.query.Nombre,
-        Codigo: req.query.Codigo, 
+        Codigo: parseINt(req.query.Codigo), 
         Direccion : {
             Calle: req.query.Calle,
             Numero : req.query.Numero,

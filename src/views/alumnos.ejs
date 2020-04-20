@@ -18,7 +18,7 @@
                             class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type='text' name="Centro" placeholder="Inserte un Centro" 
+                            <input type='number' name="Centro" placeholder="Inserte un Centro" 
                             class="form-control">
                         </div>
                         <div class="form-group">
@@ -88,6 +88,7 @@
                         <th>Centro</th>
                         <th>Direccion</th>
                         <th>DNI</th>
+                        <th>EXAMENES</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">
@@ -109,9 +110,34 @@
                       <%= result[i].DNI%>
 
                           </td>
+                         
+                            <td>
+                                
+                            <%
+                                if(result[i].Examenes!=undefined){
+
+                                
+                                let examenes= result[i].Examenes;
+                                for (var j = 0; j < examenes.length; j++) {  
+                                                                
+                                  %>
+                                  <br>
+                                  <%= examenes[j].Fecha %>
+                                  <br>
+                                  <%= examenes[j].Asignatura %>
+                                  <br>
+                                  <%= examenes[j].Nota %>  
+
+                                  <%
+                                } 
+                            }
+                            %>
+                            
+                        </td>
                         <td> 
                             <a href="/deletealumno/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
                             <a href="/editalumno/<%= result[i]._id %>" class="btn btn-info"> edit</a>
+                            <a href="/addexamen/<%= result[i]._id %>" class="btn btn-info"> Examen</a>
                             </td>
                     </tr>
                     <% } %>

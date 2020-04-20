@@ -1,26 +1,6 @@
-{
-    _id: 1,
-    nombre: "Antonio",
-    ahorros: 1600,
-    ingresosAnuales: 5000,
-    lugaresVisitados: [{
-            nombre: "India",
-            diasEstancia: 10,
-            fecha: new Date("2016-12-23"),
-            precio: 1400
-        },
-        {
-            nombre: "PerÃº",
-            diasEstancia: 15,
-            fecha: new Date("2017-03-28"),
-            precio: 1200
-        }
-    ]
-},
-
-
 //datamodel alumno
-Nombre: string,
+
+    Nombre: string,
     Apellidos: string,
     centro: Number,
     Dirección: Object {
@@ -30,43 +10,44 @@ Nombre: string,
         Municipio: String
 
     }
-DNI: String,
+    DNI: String,
     FNacimiento: Date,
     Sexo: String,
     Repetidor: Boolean
-examenes: [{
-    asignatura: string,
-    fecha: date,
-    nota: number,
+    examenes: [{
+        asignatura: string,
+        fecha: date,
+        nota: number,
 
-}]
+
+    }]
+
 
 
 //datamodel profesor
 nombre: string,
-apellidos: string
+    apellidos: string
 DNI: String,
-F_Nacimiento: Date,
+    F_Nacimiento: Date,
 
-db.profesores.insertMany([
-{
-nombre:"Jose",
-apellidos:"Carrion",
-DNI:"236489675P",
-F_Nacimiento: new Date("1975-04-16")
-},
-{
-    nombre:"Adolfo",
-    apellidos:"Suarez",
-    DNI:"254796358T",
-    F_Nacimiento: new Date("1967-05-20")
-    }
-])
-
+    db.profesores.insertMany([{
+            nombre: "Jose",
+            apellidos: "Carrion",
+            DNI: "236489675P",
+            F_Nacimiento: new Date("1975-04-16")
+        },
+        {
+            nombre: "Adolfo",
+            apellidos: "Suarez",
+            DNI: "254796358T",
+            F_Nacimiento: new Date("1967-05-20")
+        }
+    ])
 
 
 
-    //centro
+
+//centro
 nombre
 codigo
 Dirección: Object {
