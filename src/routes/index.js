@@ -59,11 +59,11 @@ router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
     const task = {
         Nombre: req.query.Nombre,
         Apellidos : req.query.Apellidos,
-        Centro : req.query.Centro,  
+        Centro : parseInt(req.query.Centro),  
         Dirección : {
             Calle : req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio
         }, 
         DNI : req.query.DNI,
@@ -93,11 +93,11 @@ router.post('/api/centros', async (req, res) => { //tenemos que tocarlo
     const db = await connect()
     const task = {
         Nombre: req.query.Nombre,
-        Codigo: req.query.Codigo, 
+        Codigo: parseInt(req.query.Codigo), 
         Direccion : {
             Calle: req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio,
             Localizacion: {
                 type: "Point",
@@ -153,11 +153,11 @@ router.put('/api/alumnos/:id', async (req, res) => {
     const update = {
         Nombre: req.query.Nombre,
         Apellidos : req.query.Apellidos,
-        Centro : req.query.Centro,  
+        Centro : parseInt(req.query.Centro),  
         Dirección : {
             Calle : req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio
         }, 
         DNI : req.query.DNI,
@@ -281,17 +281,17 @@ router.get('/addalumnos', async (req, res) => { //tocado
     const task = {
         Nombre: req.query.Nombre,
         Apellidos: req.query.Apellidos,
-        Centro: req.query.Centro,  
+        Centro: parseInt(req.query.Centro),  
         Dirección : {
             Calle: req.query.Calle,
-            CodigoPostal: req.query.CodigoPostal,
+            CodigoPostal: parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio
         },
         DNI :  req.query.DNI,
         FNacimiento :  new Date(req.query.Fecha),
         Sexo : req.query.Sexo,
         Repetidor : repetidorF,
-        Examanes: []
+        Examenes: []
 
     }
     await db.collection('alumnos').insertOne(task)
@@ -319,11 +319,11 @@ router.get('/addcentros', async (req, res) => { //tocado
     const task = {
 
         Nombre: req.query.Nombre,
-        Codigo: req.query.Codigo, 
+        Codigo: parseInt(req.query.Codigo), 
         Direccion : {
             Calle: req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio,
             Localizacion: {
                 type: "Point",
@@ -387,11 +387,11 @@ router.get('/updatealumnos/:id', async (req, res) => {
     const update = { 
         Nombre: req.query.Nombre,
         Apellidos : req.query.Apellidos,
-        Centro : req.query.Centro,  
+        Centro : parseInt(req.query.Centro),  
         Dirección : {
             Calle : req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio
         }, 
         DNI : req.query.DNI,
@@ -416,7 +416,7 @@ router.get('/updatealumno/:id/addexamen', async (req, res) => {
     const update = {
         Asignatura: req.query.Asignatura,
         Fecha:  new Date (req.query.Fecha),
-        Nota: req.query.Nota
+        Nota: parseInt(req.query.Nota)
 
     }
     console.log(" update: "+ JSON.stringify(update));
@@ -453,11 +453,11 @@ router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
     const { id } = req.params
     const update = { 
         Nombre: req.query.Nombre,
-        Codigo: parseINt(req.query.Codigo), 
+        Codigo: parseInt(req.query.Codigo), 
         Direccion : {
             Calle: req.query.Calle,
-            Numero : req.query.Numero,
-            CodigoPostal : req.query.CodigoPostal,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
             Municipio : req.query.Municipio,
             Localizacion: {
                 type: "Point",
@@ -476,136 +476,36 @@ router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
 
 // Highcharts
 
-// Gráfica de lineas 
+// Gráfica de barras
+router.get('/grabarras', async (req, res) => {
 
-router.get('/grafica', async (req, res) => {
-    res.render('grafica')
-})
-
-// Publicaciones de cada año por género 
-router.get('/datos-grafica', async (req, res) => {
     const db = await connect()
-    const result =  await db.collection('libros').aggregate([
-        { 
-            $group:{
-                _id:{
-                    gender: "$genero",
-                    year:{
-                        $year: "$fechaEdicion"
-                    }
-                },
-                total: { $sum: 1 }
-            }
-        },
-        {
-            $sort:{
-                "_id.gender": 1,
-                "_id.year": 1
-            }
+    const alumnos = await  db.collection('alumnos').aggregate([{
+        $group:{
+            _id:"$Centro",
+            alumno: { $sum: 1}
         }
-    ]).toArray()
-    
-    res.json(result)
-})
+    }
+   ]).toArray();
 
-router.get('/circle', async (req,res) => {
-    const db = await connect()
-    const result = await db.collection('libros').aggregate( [
-        {
-          $bucket: 
-            {
-                groupBy: "$edad",                        
-                boundaries: [5, 8, 11, 15, 18, 19],
-                output: {
-                    "count": {$sum: 1}
-                }
-            }
-        }
-    ]).toArray()
-    res.render('Cgrafica', {
-        result
-    })
-})
+   const centros = await  db.collection('centros').find().toArray();
 
-router.get('/barras', async (req, res) => {
-    res.render('barras')
-})
+    console.log(alumnos)
 
-router.get('/barras-find', async (req, res) => {
-    const editorial = req.query.editorial
-    const db = await connect()
-    const result = await db.collection('libros').aggregate( [
-        {
-            $match: {
-                editorial: editorial
-            }
-        },
-        {
-            $group: {
-                _id: {
-                    genero: "$genero",
-                    year:{$year:"$fechaEdicion"}
-    
-                },
-                total: {$sum:1}
-            }
-        },
-        {
-            $sort:{
-                "_id.genero":1,
-                "_id.years":1
-            }
-        }
-    ]).toArray()
-    const allYears = result.map(item => item._id.year)
-    let years = allYears.filter((year, index, self) => self.indexOf(year) === index)
-    const allGenders = result.map(item => item._id.genero)
-    let genders = allGenders.filter((gender, index, self) => self.indexOf(gender) === index)
-    let oryears = years.sort()
-
-    // Format result
-    let resultData = []
-    genders.forEach(gender => { 
-        resultData = [
-            ...resultData,
-            {
-                name: gender,
-                data: years.map(year => {
-                    const item = result.find(item => item._id.year === year)
-                    return item == null ? 0 : item.total
-                })
-            }
-        ]
+    alumnos.forEach(alumno => {
         
-    });
-    console.log(resultData)
-    res.render('HGbarras', {
-        result: JSON.stringify(resultData),
-        oryears
-    })
-})
-
-// Mapa
-router.get('/mapa', async (req, res) => {
-    const db = await connect()
-    const result = await db.collection('tiendas').find({}).toArray()
-    // Format result
-    let resultData = []
-    result.forEach(item => {
-        resultData = [
-            ...resultData, 
-            {
-                name: item.nombre,
-                lat: parseFloat(item.localizacion.coordinates[1].toFixed(6)),
-                lon: parseFloat(item.localizacion.coordinates[0].toFixed(6))
+        centros.forEach(centro => {
+            if(alumno._id===centro.Codigo){
+                alumno._id=centro.Nombre
             }
-        ]
+        });
     });
-    console.log(resultData)
-    res.render('mapa', {
-        result: JSON.stringify(resultData)
+
+    res.render('Graficabarras', {
+        alumnos
     })
-})
+}); 
+
 
 // Consultas
 
