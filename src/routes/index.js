@@ -7,14 +7,14 @@ import { ObjectID } from 'mongodb'
 
 //Api Rest
 // MOSTRAR ALUMNOS
-router.get('/api/alumnos', async (req,res) => { //tocado
+router.get('/api/alumnos', async (req,res) => { 
     const db = await connect()
     const result = await db.collection('alumnos').find({}).toArray()
     res.json(result)
 })
 
 // MOSTRAR PROFESORES
-router.get('/api/profesores', async (req,res) => { //tocado
+router.get('/api/profesores', async (req,res) => { 
     const db = await connect()
     const result = await db.collection('profesores').find({}).toArray()
     res.json(result)
@@ -46,7 +46,7 @@ router.get('/api/profesores/:id', async (req, res) => {
 
 
 // MOSTRAR UN SOLO CENTRO
-router.get('/api/centros/:id', async (req, res) => { //tocado
+router.get('/api/centros/:id', async (req, res) => { 
     const { id } = req.params
     const db = await connect()
     const result = await db.collection('centros').findOne({_id: ObjectID(id)})
@@ -76,7 +76,7 @@ router.post('/api/alumnos', async (req, res) => { //tenemos que tocarlo
 })
 
 //INSERTAR DESDE LA API A PROFESORES
-router.post('/api/profesores', async (req, res) => { //tenemos que tocarlo
+router.post('/api/profesores', async (req, res) => { 
     const db = await connect()
     const task = {
         Nombre: req.query.Nombre,
@@ -89,7 +89,7 @@ router.post('/api/profesores', async (req, res) => { //tenemos que tocarlo
 })
 
 //INSERTAR DESDE LA API A CENTROS
-router.post('/api/centros', async (req, res) => { //tenemos que tocarlo
+router.post('/api/centros', async (req, res) => { 
     const db = await connect()
     const task = {
         Nombre: req.query.Nombre,
@@ -176,11 +176,15 @@ router.put('/api/alumnos/:id', async (req, res) => {
 })
 
 // MODIFICAR DESDE LA API UN PROFESOR
-router.put('/api/profesores/:id', async (req, res) => { //TOCAR VALORES UPDATE
+router.put('/api/profesores/:id', async (req, res) => { 
     const { id } = req.params
     const update = {
-        //METER VALORES PROFESORES
-    }
+            nombre: req.query.Nombre,
+            apellidos : req.query.Apellidos,
+            DNI : req.query.DNI,
+            F_Nacimiento : new Date(req.query.Fecha)
+        }
+    
     const db = await connect()
     await db.collection('profesores').updateOne({
         _id: ObjectID(id)}, {$set: update})
@@ -191,10 +195,22 @@ router.put('/api/profesores/:id', async (req, res) => { //TOCAR VALORES UPDATE
 })
 
 //MODIFICAR DESDE LA API UN CENTRO
-router.put('/api/centros/:id', async (req, res) => { //TOCAR VALORES CENTROS
+router.put('/api/centros/:id', async (req, res) => { 
     const { id } = req.params
     const update = {
-        //METER VALORES CENTROS
+        Nombre: req.query.Nombre,
+        Codigo: parseInt(req.query.Codigo), 
+        Direccion : {
+            Calle: req.query.Calle,
+            Numero : parseInt(req.query.Numero),
+            CodigoPostal : parseInt(req.query.CodigoPostal),
+            Municipio : req.query.Municipio,
+            Localizacion: {
+                type: "Point",
+                Coordinates: [req.query.lat, req.query.lon]
+            }
+        } 
+        
     }
     const db = await connect()
     await db.collection('centros').updateOne({
@@ -246,7 +262,7 @@ router.get('/centros',  async (req, res) => {
 
 //ELIMINAR
 // ELIMINAR UN ALUMNO
-router.get('/deletealumno/:id', async (req, res) => { //tocado
+router.get('/deletealumno/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     await db.collection('alumnos').deleteOne({_id: ObjectID(id)})
@@ -254,7 +270,7 @@ router.get('/deletealumno/:id', async (req, res) => { //tocado
 })
 
 //ELIMINAR UN PROFESOR
-router.get('/deleteprofesores/:id', async (req, res) => { //tocado
+router.get('/deleteprofesores/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     await db.collection('profesores').deleteOne({_id: ObjectID(id)})
@@ -262,7 +278,7 @@ router.get('/deleteprofesores/:id', async (req, res) => { //tocado
 })
 
 //ELIMINAR UN CENTRO
-router.get('/deletecentros/:id', async (req, res) => { //tocado
+router.get('/deletecentros/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     await db.collection('centros').deleteOne({_id: ObjectID(id)})
@@ -271,7 +287,7 @@ router.get('/deletecentros/:id', async (req, res) => { //tocado
 
 //AÑADIR
 // AÑADIR ALUMNOS
-router.get('/addalumnos', async (req, res) => { //tocado
+router.get('/addalumnos', async (req, res) => { 
     const db = await connect()
     let repetidorF=false;
     console.log("req.query.Repetidor: "+req.query.Repetidor);
@@ -299,7 +315,7 @@ router.get('/addalumnos', async (req, res) => { //tocado
 })
 
 //AÑADIR PROFESORES
-router.get('/addprofesores', async (req, res) => { //TOCAR
+router.get('/addprofesores', async (req, res) => { 
     const db = await connect()
     const task = {
         nombre: req.query.Nombre,
@@ -313,7 +329,7 @@ router.get('/addprofesores', async (req, res) => { //TOCAR
 })
 
 //AÑADIR CENTROS
-router.get('/addcentros', async (req, res) => { //tocado
+router.get('/addcentros', async (req, res) => {
     const db = await connect()
 
     const task = {
@@ -339,7 +355,7 @@ router.get('/addcentros', async (req, res) => { //tocado
 //EDITAR
 
 //EDITAR UN ALUMNO
-router.get('/editalumno/:id', async (req, res) => { //tocado
+router.get('/editalumno/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     const result = await db.collection('alumnos').findOne({_id: ObjectID(id)})
@@ -348,7 +364,7 @@ router.get('/editalumno/:id', async (req, res) => { //tocado
     })   
 })
 
-router.get('/addexamen/:id', async (req, res) => { //tocado
+router.get('/addexamen/:id', async (req, res) => { 
     const { id } = req.params 
     
     res.render('introducirexamen', {
@@ -356,7 +372,7 @@ router.get('/addexamen/:id', async (req, res) => { //tocado
     })   
 })
 //EDITAR UN PROFESOR
-router.get('/editprofesores/:id', async (req, res) => { //tocado
+router.get('/editprofesores/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     const result = await db.collection('profesores').findOne({_id: ObjectID(id)})
@@ -366,7 +382,7 @@ router.get('/editprofesores/:id', async (req, res) => { //tocado
 })
 
 //EDITAR UN CENTRO
-router.get('/editcentros/:id', async (req, res) => { //tocado
+router.get('/editcentros/:id', async (req, res) => { 
     const { id } = req.params 
     const db = await connect()
     const result = await db.collection('centros').findOne({_id: ObjectID(id)})
@@ -441,7 +457,7 @@ router.get('/updateprofesores/:id', async (req, res) => {
         F_Nacimiento : new Date(req.query.Fecha)
     }
       
-    const db = await connect()//tocado
+    const db = await connect()
     await db.collection('profesores').updateOne({
         _id: ObjectID(id)}, {$set: update})
         res.redirect('/profesores')
@@ -449,7 +465,7 @@ router.get('/updateprofesores/:id', async (req, res) => {
 
 
 //update centros
-router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
+router.get('/updatecentros/:id', async (req, res) => {
     const { id } = req.params
     const update = { 
         Nombre: req.query.Nombre,
@@ -467,16 +483,16 @@ router.get('/updatecentros/:id', async (req, res) => {//TOCANDOLO
         
     }
      
-    const db = await connect()//tocado
+    const db = await connect()
     await db.collection('centros').updateOne({
         _id: ObjectID(id)}, {$set: update})
         res.redirect('/centros')
 })
 
 
-// Highcharts
+// PARTE HIGHCHARTS
 
-// Gráfica de barras
+//GRÁFICA DE BARRAS
 router.get('/grabarras', async (req, res) => {
 
     const db = await connect()
@@ -506,125 +522,4 @@ router.get('/grabarras', async (req, res) => {
     })
 }); 
 
-
-// Consultas
-
-// Usando switch
-router.get('/case', (req, res) => {
-    res.render('case')
-})
-
-router.get('/case2', async (req, res) => {
-    const genero = req.query.genero
-    const precio = parseInt(req.query.precio)
-    const db = await connect()
-    const result = await db.collection('libros').aggregate( [
-        {
-            $match: {
-                genero: genero,
-                precio: {$lt: precio}
-            }
-        },
-       {
-         $project:
-           {
-             "titulo" : 1,
-             "puntuacion" :
-             {
-               $switch:
-                 {
-                   branches: [
-                     {
-                       case: { $eq : [ "$premios.nominados", 0 ] },
-                       then: "0 estrellas"
-                     },
-                     {
-                        case: { $and : [ { $ne : [ "$premios.nominados", 0 ] }, {$eq: ["$premios.wins",0]}]},
-                        then: "1 estrella"
-                      },
-                      {
-                         case: { $and : [ {$ne: ["$premios.wins",0]}, {$lte: ["$premios.wins", 3]}]},
-                         then: "2 estrellas"
-                       },
-                       {
-                          case: { $and : [ {$gt: ["$premios.wins", 3]}]},
-                          then: "3 estrellas"
-                        }
-                   ],
-                   default: "No cumple las condiciones"
-                 }
-              }
-           }
-        }
-        
-    ]).toArray()
-    res.render('tcase', {
-        result
-    })
-})
-
-//usando unwind
-router.get('/unwind', async (req, res) => {
-    const db = await connect()
-    const result = await db.collection('libros').aggregate( [
-        {
-            $unwind: "$autores"
-        },
-        {
-            $group: {
-                _id: "$autores",
-                total: {$sum:1}
-            }
-        },
-         {
-             $sort: { _id:1}
-         }  
-    ]).toArray()
-    res.render('unwind', {
-        result
-    })
-})
-
-//usando lookup
-router.get('/join0', (req, res) => {
-    res.render('formuJoin')
-})
-
-router.get('/join', async (req, res) => {
-    const genero = req.query.genero
-    const precio = parseInt(req.query.precio)
-    const edad = parseInt(req.query.edad)
-    const db = await connect()
-    const result = await db.collection('libros').aggregate( [
-        {
-            $lookup:
-              {
-                from: "tiendas",
-                localField: "editorial",
-                foreignField: "nombre",
-                as: "docs"
-              }
-         },
-         {
-             $match: {
-                 genero: genero,
-                 edad: {$lte: edad},
-                 precio: {$lte: precio},
-             }
-         },
-         {
-             $project: {
-                 titulo: 1,
-                 edad:1,
-                 precio:1,
-                 "docs.nombre":1,
-                 "docs.localizacion.coordinates":1
-             }
-         }
-    ]).toArray()
-    console.log(genero,edad,precio)
-    res.render('join', {
-        result
-    })
-})
 module.exports = router

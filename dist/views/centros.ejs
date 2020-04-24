@@ -6,23 +6,39 @@
         <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
-                     <form action="/add" method="GET">
-                        <h3> <center> Añadir Editoriales</center></h3>
+                     <form action="/addcentros" method="GET">
+                        <h3> <center> Añadir Centros</center></h3>
                         <br/>
                          <div class="form-group">
-                             <input type='text' name="nombre" placeholder="Inserta un Nombre" 
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
                              class="form-control">
                          </div>
                          <div class="form-group">
-                            <input type='number' name="sede" placeholder="Inserte numero de sede" 
-                            class="form-control">
-                        </div>
-                         <div class="form-group">
-                            <input type='number' step="any" name="w" placeholder="Inserta primera coordenada (W)" 
+                            <input type='Number' name="Codigo" placeholder="Inserte un Código" 
                             class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type='number' step="any" name="n" placeholder="Inserta segunda coordenada (N)" 
+                            <input type='text' name="Calle" placeholder="Inserte una Calle" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="Numero" placeholder="Inserte un numero" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="CodigoPostal" placeholder="Inserte un Codigo Postal" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Municipio" placeholder="Inserte un municipio" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='number' step="any" name="lat" placeholder="Inserta primera coordenada (W)" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='number' step="any" name="lon"  placeholder="Inserta segunda coordenada (N)" 
                             class="form-control">
                         </div> 
                          <button type="submit" class="btn btn-primary btn-block">Add</button>
@@ -44,22 +60,29 @@
                 <thead>
                     <br/>
                     <tr>
-                        <th>Nº</th>
                         <th>Nombre</th>
-                        <th>Sede</th>
-                        <th>Localización</th>
+                        <th>Codigo</th>
+                        <th>Direccion</th>
+                        
                     </tr>
                 </thead>
                 <tbody id="myTable">
                     <% for(var i = 0; i < result.length; i++) { %>
                     <tr>
-                        <td> <%= i + 1 %></td>
-                        <td> <%= result[i].nombre%></td>
-                        <td> <%= result[i].sede%></td>
-                        <td> <%= result[i].localizacion.coordinates%></td>
-                        <td>
-                            <a href="/delete/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
-                            <a href="/edit/<%= result[i]._id %>" class="btn btn-info"> Edit</a>
+                        <!-- <td><%= i + 1 %></td> -->
+                        <td> <%= result[i].Nombre%></td>
+                        <td> <%= result[i].Codigo%></td>
+                        <td> 
+                            <%= result[i].Direccion.Calle%>
+                            <%= result[i].Direccion.Numero%>
+                      <br>
+                      <%= result[i].Direccion.CodigoPostal%>
+                      <br>
+                      <%= result[i].Direccion.Municipio%>
+                          </td>
+                        <td> 
+                            <a href="/deletecentros/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
+                            <a href="/editcentros/<%= result[i]._id %>" class="btn btn-info"> Edit</a>
                             </td>
                     </tr>
                     <% } %>

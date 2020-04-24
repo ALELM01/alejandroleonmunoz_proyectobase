@@ -1,0 +1,167 @@
+<%- include ('partials/_header') %> 
+<div class="container">
+    <!-- Formulario para añadir tiendas-->
+    <br/>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                     <form action="/addalumnos" method="GET">
+                        <h3> <center> Añadir Alumnos</center></h3>
+                        <br/>
+                         <div class="form-group">
+                             <input type='text' name="Nombre" placeholder="Inserta un Nombre" 
+                             class="form-control">
+                         </div>
+                         <div class="form-group">
+                            <input type='text' name="Apellidos" placeholder="Inserte un Apellido" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='number' name="Centro" placeholder="Inserte un Centro" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Calle" placeholder="Inserte una Calle" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="Numero" placeholder="Inserte un numero" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='Number' name="CodigoPostal" placeholder="Inserte un Codigo Postal" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="Municipio" placeholder="Inserte un municipio" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='text' name="DNI" placeholder="Inserte un DNI" 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type='date' name="Fecha" placeholder="Inserte una fecha de nacimiento " 
+                            class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="radio" id="Masculino" name="Sexo" value="Masculino"  class="form-check-input">
+                            <label for="male">Masculino</label><br>
+                            <input type="radio" id="Femenino" name="Sexo" value="Femenino"  class="form-check-input">
+                            <label for="female">Femenino</label><br>
+                           
+                        </div>
+                        <div class="form-group">
+                            <input type='checkbox' id="Repetidor" name="Repetidor"   class="form-check-input">
+                            <label for="Repetidor">Repetidor</label><br> 
+                        </div>
+                         <button type="submit" class="btn btn-primary btn-block">Add</button>
+                     </form>
+                </div>
+            </div>
+            <!--    
+
+                   DNI: "85469789D",
+    FNacimiento: new Date("1974-05-28"),
+    Sexo: "Masculino",
+    Repetidor: false,
+
+            -->
+        </div>
+        </div>
+        <hr style="color: black;" noshade="noshade"/>
+        <br/>
+        <br/>
+    <!-- Lista -->
+            <div class="input-group md-form form-sm form-2 pl-0">
+                <h4> &nbsp;&nbsp; Buscador: </h4>
+                <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search"  id="tableSearch">
+            </div>
+    <div class="col-nd-7">
+            <table class="table table-bordered table-hover" style="background-color: white">
+                <thead>
+                    <br/>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Centro</th>
+                        <th>Direccion</th>
+                        <th>DNI</th>
+                        <th>EXAMENES</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                    <% for(var i = 0; i < result.length; i++) { %>
+                    <tr>
+                        <!-- <td><%= i + 1 %></td> -->
+                        <td> <%= result[i].Nombre%></td>
+                        <td> <%= result[i].Apellidos%></td>
+                        <td><%= result[i].Centro%></td>
+                        <td> 
+                            <%= result[i].Dirección.Calle%>
+                            <%= result[i].Dirección.Numero%>
+                      <br>
+                      <%= result[i].Dirección.CodigoPostal%>
+                      <br>
+                      <%= result[i].Dirección.Municipio%>
+                          </td>
+                          <td>
+                      <%= result[i].DNI%>
+
+                          </td>
+                         
+                            <td>
+                                
+                            <%
+                                if(result[i].Examenes!=undefined){
+
+                                
+                                let examenes= result[i].Examenes;
+                                for (var j = 0; j < examenes.length; j++) {  
+                                                                
+                                  %>
+                                  <br>
+                                  <%= examenes[j].Fecha %>
+                                  <br>
+                                  <%= examenes[j].Asignatura %>
+                                  <br>
+                                  <%= examenes[j].Nota %>  
+
+                                  <%
+                                } 
+                            }
+                            %>
+                            
+                        </td>
+                        <td> 
+                            <a href="/deletealumno/<%= result[i]._id %>" class="btn btn-danger"> Delete</a>
+                            <a href="/editalumno/<%= result[i]._id %>" class="btn btn-info"> edit</a>
+                            <a href="/addexamen/<%= result[i]._id %>" class="btn btn-info"> Examen</a>
+                            </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+    </div>
+</div>
+<style>
+        .input-group.md-form.form-sm.form-2 input.amber-border {
+          border: 1px solid #ffca28;
+          margin: 35px 600px 50px 80px;
+        }
+        </style>
+        <script>
+        // Filter table
+        
+        $(document).ready(function(){
+          $("#tableSearch").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
+
+<%- include ('partials/_footer') %>

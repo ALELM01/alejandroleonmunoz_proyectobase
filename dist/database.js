@@ -1,23 +1,31 @@
-"use strict";
+/*import MongoClient from 'mongodb'
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.connect = connect;
 
-var _mongodb = _interopRequireDefault(require("mongodb"));
+export async function connect() {
+    try {
+        const client = await MongoClient.connect('mongodb+srv://user:user@mvico-hbci6.azure.mongodb.net/test?retryWrites=true&w=majority', {
+            useUnifiedTopology: true
+        })
+        const db = client.db('Proyecto')
+        console.log('DB is connected')
+        return db
+    } catch(e) {
+        console.log(e)
+    }
+}*/
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import MongoClient from 'mongodb'
 
-async function connect() {
-  try {
-    const client = await _mongodb.default.connect('mongodb+srv://user:user@mvico-hbci6.azure.mongodb.net/test?retryWrites=true&w=majority', {
-      useUnifiedTopology: true
-    });
-    const db = client.db('Proyecto');
-    console.log('DB is connected');
-    return db;
-  } catch (e) {
-    console.log(e);
-  }
+
+export async function connect() {
+    try {
+        const client = await MongoClient.connect('mongodb+srv://admin:admin1007@cluster0-yzhtx.mongodb.net/test?retryWrites=true&w=majority', {
+            useUnifiedTopology: true
+        })
+        const db = client.db('alejandroleonmunozpro')
+        console.log('DB is connected')
+        return db
+    } catch(e) {
+        console.log(e)
+    }
 }

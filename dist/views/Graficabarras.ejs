@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráfica de líneas Alejandro León</title>
-</head>
-<body>
+<%- include('partials/_header'); -%>
 
     <!-- HTML PARTE 1 A PARTIR DE COLUMN WITH ROTATED LABELS-->
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -19,20 +11,24 @@
 
     <!-- CSS entre etiquetas <style>-->
         <style  type="text/css">
-       .highcharts-figure, .highcharts-data-table table {
-    min-width: 360px;
+        #container {
+    height: 400px;
+}
+
+.highcharts-figure, .highcharts-data-table table {
+    min-width: 310px;
     max-width: 800px;
     margin: 1em auto;
 }
 
 .highcharts-data-table table {
-	font-family: Verdana, sans-serif;
-	border-collapse: collapse;
-	border: 1px solid #EBEBEB;
-	margin: 10px auto;
-	text-align: center;
-	width: 100%;
-	max-width: 500px;
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #EBEBEB;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
 }
 .highcharts-data-table caption {
     padding: 1em 0;
@@ -52,6 +48,7 @@
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
+
         </style>
 
 
@@ -63,44 +60,66 @@
 
         <!-- script del gráfico añadiendo etiquetas <script>-->
              <script type="text/javascript">
-               Highcharts.chart('container', {
+                Highcharts.chart('container', {
     chart: {
-        type: 'line'
+        type: 'column'
     },
     title: {
-        text: 'Gráfica de lineas Guitarras'
+        text: 'Gráfica de barras alumnos por centro'
     },
     subtitle: {
-        text: 'Agrupación por fecha de compra de guitarra'
+        text: 'Agrupación de alumnos por centros'
     },
     xAxis: {
-        categories: [
-        <% for(var i = 0; i < lineasguitarras.length; i++) { %>
-                '<%= lineasguitarras[i].fechaS %>',
-           <% } %>
+
+        categories:[
+            <%
+
+            alumnos.forEach(element => {
+            
+                %>
+                "<%= element._id%>",
+                <%});
+            %>
         ]
     },
     yAxis: {
+        min: 0,
         title: {
-            text: 'Cantidad por precio'
+            text: 'Clientes'
         }
     },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
-        }
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: 'Codigo'
     },
     series: [{
-
-        name: 'Meses por compra',
+        name: 'Clientes',
         data: [
-            <% for(var i = 0; i < lineasguitarras.length; i++) { %>
-              <%= lineasguitarras[i].valor %>,
-           <% } %>
-        ]
+        <%
+
+alumnos.forEach(element => {
+
+    %>
+    <%= element.alumno%>,
+    <%});
+%>
+
+        ],
+        dataLabels: {
+            enabled: true,
+            rotation: -90,
+            color: '#FFFFFF',
+            align: 'right',
+            format: '{point.y:.1f}', // one decimal
+            y: 10, // 10 pixels down from the top
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
     }]
 });
 
@@ -110,5 +129,6 @@
              Realizado por: Alejandro León.
             </p>
             </figure>
+
 </body>
 </html>
